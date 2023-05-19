@@ -204,7 +204,8 @@ def memberWindow():
                 cv2.rectangle(im, (x, y), (x+w, y+h), (10, 159, 255), 2)
                 Id, conf = recognizer.predict(gray[y:y+h, x:x+w])
                 if conf < 100:
-                    aa = df.loc[df['Id'] == Id]['Name'].values
+                    aa = df.loc[str(Id) == (df['Id'])]['Name'].values
+                    # aa = aa[0]
                     confstr = "  {0}%".format(round(100 - conf))
                     tt = str(Id)+"-"+aa
                 else:
@@ -212,7 +213,7 @@ def memberWindow():
                     tt = str(Id)
                     confstr = "  {0}%".format(round(100 - conf))
 
-                if (100-conf) > 67:
+                if (100-conf) > 50:
                     ts = time.time()
                     date = datetime.datetime.fromtimestamp(
                         ts).strftime('%Y-%m-%d')
@@ -222,8 +223,7 @@ def memberWindow():
                     attendance.loc[len(attendance)] = [Id, aa, date, timeStamp]
 
                 tt = str(tt)[2:-2]
-                print(type(tt),tt)
-                if (100-conf) > 67:
+                if (100-conf) > 50:
                     tt = tt + " [Pass]"
                     cv2.putText(im, str(tt), (x+5, y-5),
                                 font, 1, (255, 255, 255), 2)
@@ -231,10 +231,10 @@ def memberWindow():
                     cv2.putText(im, str(tt), (x + 5, y - 5),
                                 font, 1, (255, 255, 255), 2)
 
-                if (100-conf) > 67:
+                if (100-conf) > 50:
                     cv2.putText(im, str(confstr), (x + 5, y + h - 5),
                                 font, 1, (0, 255, 0), 1)
-                elif (100-conf) > 50:
+                elif (100-conf) > 40:
                     cv2.putText(im, str(confstr), (x + 5, y + h - 5),
                                 font, 1, (0, 255, 255), 1)
                 else:
